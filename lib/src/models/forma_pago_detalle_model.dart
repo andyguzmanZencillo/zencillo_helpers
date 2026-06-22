@@ -410,4 +410,67 @@ class FormaPagoDetalleModel extends Equatable {
         anulada: false,
         multiplesVentas: false);
   }
+  //fromJson
+  factory FormaPagoDetalleModel.fromJson(Map<String, dynamic> json) {
+    return FormaPagoDetalleModel(
+      idVenta: (json['idVenta'] as num?)?.toInt() ?? 0,
+      idTurno: (json['idTurno'] as num?)?.toInt() ?? 0,
+      identificacionRed: json['identificacionRed'] as String? ?? '',
+      codigoRespuestaActor: json['codigoRespuestaActor'] as String? ?? '',
+      mensajeRespuesta: json['mensajeRespuesta'] as String? ?? '',
+      secuencialTransaccion:
+          (json['secuencialTransaccion'] as num?)?.toInt() ?? 0,
+      numeroLote: (json['numeroLote'] as num?)?.toInt() ?? 0,
+      horaTransaccion: (json['horaTransaccion'] as num?)?.toInt() ?? 0,
+      fechaTransaccion: json['fechaTransaccion'] != null
+          ? DateTime.tryParse(json['fechaTransaccion'].toString())
+          : null,
+      numeroAutorizacion: json['numeroAutorizacion'] as String? ?? '',
+      tid: json['tid'] as String? ?? '',
+      mid: json['mid'] as String? ?? '',
+      valorInteres: (json['valorInteres'] as num?)?.toDouble() ?? 0.0,
+      mensajeImpresion: json['mensajeImpresion'] as String? ?? '',
+      codigoBanco: (json['codigoBanco'] as num?)?.toInt() ?? 0,
+      nombreBanco: json['nombreBanco'] as String? ?? '',
+      nombreGrupoTarjeta: json['nombreGrupoTarjeta'] as String? ?? '',
+      modoLectura: json['modoLectura'] as String? ?? '',
+      nombreTarjetaHabiente: json['nombreTarjetaHabiente'] as String? ?? '',
+      montoFijo: json['montoFijo'] as String? ?? '',
+      identificadorAplicacion: json['identificadorAplicacion'] as String? ?? '',
+      aid: json['aid'] as String? ?? '',
+      tipoCrigtograma: json['tipoCrigtograma'] as String? ?? '',
+      pin: json['pin'] as String? ?? '',
+      arqc: json['arqc'] as String? ?? '',
+      numeroTarjetaTruncado: json['numeroTarjetaTruncado'] as String? ?? '',
+      fechaVencimientoTarjeta:
+          (json['fechaVencimientoTarjeta'] as num?)?.toInt() ?? 0,
+      numeroTarjetaEncriptada: json['numeroTarjetaEncriptada'] as String? ?? '',
+      impuesto: (json['impuesto'] as num?)?.toDouble() ?? 0.0,
+      baseConImpuesto: (json['baseConImpuesto'] as num?)?.toDouble() ?? 0.0,
+      baseSinImpuesto: (json['baseSinImpuesto'] as num?)?.toDouble() ?? 0.0,
+      montoImpuesto: (json['montoImpuesto'] as num?)?.toDouble() ?? 0.0,
+      montoTotal: (json['montoTotal'] as num?)?.toDouble() ?? 0.0,
+      idFormaPago: (json['idFormaPago'] as num?)?.toInt() ?? 0,
+      host: json['host'] as String? ?? '',
+      hostName: json['hostName'] as String? ?? '',
+      tipoTarjeta: json['tipoTarjeta'] as String? ?? '',
+      tipoVenta: json['tipoVenta'] as String? ?? '',
+      numeroTarjeta: json['numeroTarjeta'] as String? ?? '',
+      loteAbierto: json['loteAbierto'] as String? ?? '',
+      nombreTH: json['nombreTH'] as String? ?? '',
+      aprobacion: json['aprobacion'] as String? ?? '',
+      idTerminal: json['idTerminal'] as String? ?? '',
+      numeroReferencia: json['numeroReferencia'] as String? ?? '',
+      codigoReferencia: json['codigoReferencia'] as String? ?? '',
+      idComercio: json['idComercio'] as String? ?? '',
+      diferidoyQuickPayment: json['diferidoyQuickPayment'] as String? ?? '',
+      reservado: json['reservado'] as String? ?? '',
+      archivoFirma: json['archivoFirma'] as String? ?? '',
+      tvr: json['tvr'] as String? ?? '',
+      tsi: json['tsi'] as String? ?? '',
+      idCashBack: (json['idCashBack'] as num?)?.toInt() ?? 0,
+      anulada: json['anulada'] as bool? ?? false,
+      multiplesVentas: json['multiplesVentas'] as bool? ?? false,
+    );
+  }
 }
