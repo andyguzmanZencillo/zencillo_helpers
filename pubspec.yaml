@@ -11,6 +11,9 @@ dependencies:
   equatable: ^2.0.8
   flutter:
     sdk: flutter
+  pdf: ^3.11.3
+  qr_flutter: ^4.1.0
+  xml: ^6.5.0
 
 dev_dependencies:
   flutter_test:
