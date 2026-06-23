@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 extension ExtensionInt on int {
   DateTime convertWindevDate() {
     final baseDate = DateTime(1800, 1, 1);
@@ -29,6 +31,18 @@ extension ExtensionDate on DateTime {
     final s = second.toString().padLeft(2, '0');
     final ms = millisecond.toString().padLeft(3, '0');
     return '$y$m$d$h$min$s$ms';
+  }
+
+  String formatHour2() {
+    return DateFormat('HH:mm').format(this);
+  }
+
+  String literalMonthShortUpperOnlyMonth([String separator = '/']) {
+    final day = DateFormat('dd', 'es').format(this);
+    final month = DateFormat('MMM', 'es').format(this).toUpperCase();
+    final year = DateFormat('yyyy', 'es').format(this);
+
+    return '$day$separator$month$separator$year';
   }
 }
 
