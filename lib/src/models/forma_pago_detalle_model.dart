@@ -478,6 +478,7 @@ class FormaPagoDetalleModel extends Equatable {
       idCashBack: (json['idCashBack'] as num?)?.toInt() ?? 0,
       anulada: json['anulada'] as bool? ?? false,
       multiplesVentas: json['multiplesVentas'] as bool? ?? false,
+      result: json['result'] as bool? ??false,
     );
   }
   //toJson
@@ -537,6 +538,7 @@ class FormaPagoDetalleModel extends Equatable {
       'idCashBack': idCashBack,
       'anulada': anulada,
       'multiplesVentas': multiplesVentas,
+      'result': result,
     };
   }
 }
