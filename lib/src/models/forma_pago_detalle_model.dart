@@ -55,6 +55,7 @@ class FormaPagoDetalleModel extends Equatable {
   final int idCashBack;
   final bool anulada;
   final bool multiplesVentas;
+  final bool result;
 
   const FormaPagoDetalleModel({
     required this.idVenta,
@@ -111,6 +112,7 @@ class FormaPagoDetalleModel extends Equatable {
     required this.idCashBack,
     required this.anulada,
     required this.multiplesVentas,
+    required this.result,
   });
 
   @override
@@ -169,6 +171,7 @@ class FormaPagoDetalleModel extends Equatable {
         idCashBack,
         anulada,
         multiplesVentas,
+        result
       ];
 
   FormaPagoDetalleModel copyWith({
@@ -226,6 +229,7 @@ class FormaPagoDetalleModel extends Equatable {
     int? idCashBack,
     bool? anulada,
     bool? multiplesVentas,
+    bool? result,
   }) {
     return FormaPagoDetalleModel(
       idVenta: idVenta ?? this.idVenta,
@@ -289,6 +293,7 @@ class FormaPagoDetalleModel extends Equatable {
       idCashBack: idCashBack ?? this.idCashBack,
       anulada: anulada ?? this.anulada,
       multiplesVentas: multiplesVentas ?? this.multiplesVentas,
+      result: result ?? this.result
     );
   }
 
@@ -348,7 +353,8 @@ class FormaPagoDetalleModel extends Equatable {
         'tsi: $tsi, '
         'idCashBack: $idCashBack, '
         'anulada: $anulada, '
-        'multiplesVentas: $multiplesVentas'
+        'multiplesVentas: $multiplesVentas, '
+        'result: $result'
         ')';
   }
   //empty
@@ -408,6 +414,8 @@ class FormaPagoDetalleModel extends Equatable {
         tsi: '',
         idCashBack: 0,
         anulada: false,
-        multiplesVentas: false);
+        multiplesVentas: false,
+        result: false,
+        );
   }
 }
