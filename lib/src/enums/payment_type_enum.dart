@@ -21,6 +21,14 @@ enum PaymentType {
     value: 989,
     text: 'Tarjeta Bancolombia',
   ),
+
+  /**
+   *    e.codigo == PaymentType.credibancoQr.code.toString() ||
+              e.codigo == PaymentType.credibancoBreb.code.toString(),10053	CREDIBANCO_QR	30
+10054	CREDIBANCO_BREB	31 */
+
+  credibancoQr(id: 10053, code: 30, value: 30, text: 'CREDIBANCO QR'),
+  credibancoBreb(id: 10054, code: 31, value: 31, text: 'CREDIBANCO BREB'),
   // Métodos de la tabla
   revolution(id: 990, code: 990, value: 990, text: 'REVOLUTION'),
   puntosColombia(id: 992, code: 992, value: 992, text: 'Puntos Colombia'),
