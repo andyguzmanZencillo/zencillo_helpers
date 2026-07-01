@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:equatable/equatable.dart';
 import 'package:pdf/widgets.dart' as widgets;
 import 'package:zencillo_helpers/src/extensions/extension_list.dart';
+import 'package:zencillo_helpers/src/models/punto_venta_impresion_model.dart';
 import 'package:zencillo_helpers/src/utils/document_builder/qr_utils.dart';
 import 'package:zencillo_helpers/src/utils/document_builder/result_text_print.dart';
 import 'package:zencillo_helpers/src/utils/document_builder/text_build_cardnet.dart';
@@ -12,7 +13,6 @@ import 'package:zencillo_helpers/src/utils/document_builder/text_build_pdf.dart'
 import 'package:zencillo_helpers/src/utils/document_builder/text_build_termic.dart';
 import 'package:zencillo_helpers/src/utils/document_builder/text_build_xml.dart';
 import 'package:zencillo_helpers/src/utils/document_builder/text_utils.dart';
-import 'package:zencillo_helpers/zencillo_helpers.dart';
 
 class TextSafeUtils {
   static String normalize(String text) {
