@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
 import 'package:pdf/widgets.dart' as widgets;
+import 'package:zencillo_helpers/src/extensions/extension_list.dart';
 import 'package:zencillo_helpers/src/utils/document_builder/qr_utils.dart';
 import 'package:zencillo_helpers/src/utils/document_builder/result_text_print.dart';
 import 'package:zencillo_helpers/src/utils/document_builder/text_build_cardnet.dart';
@@ -11,6 +12,7 @@ import 'package:zencillo_helpers/src/utils/document_builder/text_build_pdf.dart'
 import 'package:zencillo_helpers/src/utils/document_builder/text_build_termic.dart';
 import 'package:zencillo_helpers/src/utils/document_builder/text_build_xml.dart';
 import 'package:zencillo_helpers/src/utils/document_builder/text_utils.dart';
+import 'package:zencillo_helpers/zencillo_helpers.dart';
 
 class TextSafeUtils {
   static String normalize(String text) {
@@ -26,11 +28,48 @@ class TextSafeUtils {
 }
 
 class BuilderDocument {
+  static Future<List<DocumentItem>> orderList({
+    required List<DocumentItem> items,
+    required List<PuntoVentaImpresionModel> puntosVentaImpresion,
+  }) async {
+    try {
+      final newList = <DocumentItem>[];
+      for (var item in items) {
+        final impresionPunto = puntosVentaImpresion.firstWhereOrNull(
+          (e) => e.posicion == item.number,
+        );
+        item.posicion = impresionPunto?.posicion ?? 0;
+        newList.add(item);
+      }
+
+      final newListPrint = <DocumentItem>[];
+
+      newList.sort((a, b) {
+        return a.posicion.compareTo(b.posicion);
+      });
+
+      for (var element in newList) {
+        if (element.number != 0) {
+          newListPrint.add(element);
+          final itemsHijos =
+              await getItems(items: newList, father: element.number);
+          if (itemsHijos.isNotEmpty) {
+            newListPrint.addAll(itemsHijos);
+          }
+        }
+      }
+
+      return newListPrint;
+    } catch (e) {
+      throw Exception('Error al ordenar la lista de impresión: $e');
+    }
+  }
+
   static Future<ResultBuilderDocument> builder({
     required List<DocumentItem> items,
     required int lengthPerLine,
     required int tamanioLetra,
-    //List<PuntoVentaImpresionEntity> puntosVentaImpresion = const [],
+    List<PuntoVentaImpresionModel> puntosVentaImpresion = const [],
     bool useOrder = false,
     String? qr,
   }) async {
@@ -43,10 +82,10 @@ class BuilderDocument {
     final pdf = <widgets.Widget>[];
 
     if (useOrder) {
-      /*items = await orderList(
+      items = await orderList(
         items: items,
-        //puntosVentaImpresion: puntosVentaImpresion,
-      );*/
+        puntosVentaImpresion: puntosVentaImpresion,
+      );
     }
 
     for (var element in items) {
@@ -360,285 +399,6 @@ class BuilderDocument {
       throw Exception('Error al obtener los items hijos de la impresión: $e');
     }
   }
-/*
-  static Future<ResultBuilderDocument> builderOrder({
-    required List<DocumentItem> items,
-    required List<PuntoVentaImpresionEntity> puntosVentaImpresion,
-    String? qr,
-  }) async {
-    final data = await handleExceptions<ResultBuilderDocument>(() async {
-      final text = <String>[];
-      final xml = <String>[];
-      final termic = <Map<String, dynamic>>[];
-
-      final textMediaNet = <Map<String, dynamic>>[];
-
-      final cardNetPos = <Map<String, dynamic>>[];
-      await AppLogStorageService.saveLog(
-        message: 'Preparando datos de impresión',
-      );
-      items = await orderList(
-        items: items,
-        puntosVentaImpresion: puntosVentaImpresion,
-      );
-
-      for (var element in items) {
-        if (!element.isUse) continue;
-        switch (element.type) {
-          case TypeDocument.text:
-            //text
-            final item = element as DocumentText;
-
-            if (item.text == '0' || item.text.isEmpty || item.text == '1') {
-              continue;
-            }
-            text.add(item.text);
-
-            //XML
-            xml.addAll(
-              XmlTextBuilder.textoProCenter(
-                item.text,
-                PrintHelper.lengthPerLine,
-              ).toList(),
-            );
-
-            //termic
-            termic.add(
-              TermicBuilder.textoCentro(item.text),
-            );
-
-            //medianet
-            textMediaNet.add(
-              TextBuildMediaNet.text(
-                item.text,
-              ),
-            );
-
-            //cardNetPos
-            cardNetPos.addAll(
-              CardNetPosBuilder.textCenterList(
-                item.text,
-                fontSize: PrintHelper.tamanioLetra,
-                width: PrintHelper.lengthPerLine,
-              ),
-            );
-            break;
-          case TypeDocument.textBold:
-            //text
-            final item = element as DocumentText;
-            text.add(item.text);
-
-            //XML
-            xml.addAll(
-              XmlTextBuilder.textoProCenter(
-                item.text,
-                PrintHelper.lengthPerLine,
-              ),
-            );
-
-            //termic
-            termic.add(
-              TermicBuilder.textoCentro(item.text),
-            );
-            //medianet
-            textMediaNet.add(
-              TextBuildMediaNet.text(
-                item.text,
-                bold: true,
-              ),
-            );
-
-            //cardNetPos
-            cardNetPos.addAll(
-              CardNetPosBuilder.textCenterList(
-                item.text,
-                bold: true,
-                fontSize: PrintHelper.tamanioLetra,
-                width: PrintHelper.lengthPerLine,
-              ),
-            );
-            break;
-          case TypeDocument.rightLeft:
-            //text
-            final item = element as DocumentTextRightLeft;
-            text.add(
-              TextUtils.addSpace(
-                item.title,
-                item.value,
-                PrintHelper.lengthPerLine,
-              ),
-            );
-            //xml
-            xml.add(
-              XmlTextBuilder.lineaConTitulo(
-                item.title,
-                item.value,
-                PrintHelper.lengthPerLine,
-              ),
-            );
-            //termic
-            termic.add(
-              TermicBuilder.textoLeftRight(
-                item.title,
-                item.value,
-              ),
-            );
-            //medianet
-            textMediaNet.add(
-              TextBuildMediaNet.leftRight(
-                item.title,
-                item.value,
-                width: PrintHelper.lengthPerLine,
-              ),
-            );
-            //cardNetPos
-            cardNetPos.addAll(
-              CardNetPosBuilder.leftRightList(
-                item.title,
-                item.value,
-                width: PrintHelper.lengthPerLine,
-                fontSize: PrintHelper.tamanioLetra,
-              ),
-            );
-            break;
-          case TypeDocument.space:
-            //text
-            final item = element as DocumentSpace;
-            for (var i = 0; i < item.lines; i++) {
-              text.add('');
-            }
-
-            //xml
-            for (var i = 0; i < item.lines; i++) {
-              xml.add(
-                XmlTextBuilder.texto('', PrintHelper.lengthPerLine),
-              );
-            }
-
-            //termic
-            for (var i = 0; i < item.lines; i++) {
-              termic.add(
-                TermicBuilder.espacioExtra(),
-              );
-            }
-
-            //medianet
-            for (var i = 0; i < item.lines; i++) {
-              textMediaNet.add(
-                TextBuildMediaNet.space(),
-              );
-            }
-            //cardNetPos
-            /*for (var i = 0; i < item.lines; i++) {
-              cardNetPos.add(
-                CardNetPosBuilder.br(),
-              );
-            }*/
-            break;
-          case TypeDocument.divider:
-            //text
-            text.add(TextUtils.singleLineSeparator(PrintHelper.lengthPerLine));
-            //xml
-            xml.add(
-              XmlTextBuilder.separador(PrintHelper.lengthPerLine),
-            );
-
-            //termic
-            termic.add(
-              TermicBuilder.separador(),
-            );
-            //medianet
-            textMediaNet.add(
-              TextBuildMediaNet.text(
-                TextUtils.singleLineSeparator(PrintHelper.lengthPerLine),
-              ),
-            );
-            //cardNetPos
-            cardNetPos.addAll(
-              CardNetPosBuilder.textCenterList(
-                TextUtils.singleLineSeparator(
-                  PrintHelper.lengthPerLine,
-                ),
-                fontSize: PrintHelper.tamanioLetra,
-                width: PrintHelper.lengthPerLine,
-              ),
-            );
-
-            break;
-          case TypeDocument.dobleDivider:
-            //text
-            text.add(TextUtils.doubleLineSeparator(PrintHelper.lengthPerLine));
-
-            //xml
-            xml.add(
-              XmlTextBuilder.separador(PrintHelper.lengthPerLine),
-            );
-            //termic
-            termic.add(
-              TermicBuilder.separador(),
-            );
-
-            //medianet
-            textMediaNet.add(
-              TextBuildMediaNet.text(
-                TextUtils.doubleLineSeparator(PrintHelper.lengthPerLine),
-              ),
-            ); //cardNetPos
-            cardNetPos.addAll(
-              CardNetPosBuilder.textCenterList(
-                TextUtils.doubleLineSeparator(PrintHelper.lengthPerLine),
-                fontSize: PrintHelper.tamanioLetra,
-                width: PrintHelper.lengthPerLine,
-              ),
-            );
-            break;
-          case TypeDocument.qr:
-            final item = element as DocumentQR;
-
-            //termic
-            termic.add(
-              TermicBuilder.qrCode(item.data),
-            );
-
-            //medianet
-            final qrBase64 = await QrUtils.generateQrBase64Safe(item.data);
-
-            if (qrBase64 != null) {
-              TextBuildMediaNet.image(qrBase64);
-            }
-
-            //CARDNETPOS
-            cardNetPos.add(
-              CardNetPosBuilder.qr(
-                item.data,
-              ),
-            );
-            break;
-        }
-      }
-      await AppLogStorageService.saveLog(
-        message: 'Datos de impresión preparados',
-      );
-      return ResultBuilderDocument(
-          resultTextPrint: ResultTextPrint(text: text, qr: qr ?? ''),
-          xml: XmlTextBuilder.construirBody(
-            root: 'FacturaImpresion',
-            contenido: xml,
-          ),
-          termic: jsonEncode(termic),
-          mediaNetText: TextBuildMediaNet.build(textMediaNet),
-          cardNetPos: CardNetPosBuilder.buildPro(cardNetPos),
-          pdf: await PdfBuilder.build(p));
-    });
-    await AppLogStorageService.saveLog(
-      message: 'Proceso de construcción de documento finalizado',
-    );
-    if (data.isOk()) {
-      return data.unwrap();
-    } else {
-      return ResultBuilderDocument.empty();
-    }
-  }*/
 }
 
 class ResultBuilderDocument extends Equatable {
