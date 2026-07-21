@@ -879,3 +879,9 @@ class DocumentQR implements DocumentItem {
         _numberFather = numberFather,
         _type = type;
 }
+
+class DocumentBig {}
+
+class DocumentBigTitle implements DocumentBig {
+  
+}
