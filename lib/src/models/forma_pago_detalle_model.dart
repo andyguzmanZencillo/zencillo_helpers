@@ -563,12 +563,26 @@ class ResponseReverseModel extends Equatable {
   final String amountIVA;
   final String amountNotIVA;
   final String iva;
+
+  final double amount;
+  final double subtotal;
+  final double tax;
+  final String sequential;
   final String hourTrans;
   final String dateTrans;
-
+  final String authNumber;
   final String mid;
   final String tid;
   final String cid;
+  final String idCodNetAcq;
+  final String idCodDef;
+  final String limitDef;
+  final String monthsGrace;
+  final String filler1;
+  final String service;
+  final String tips;
+  final String fixedAmount;
+  final String filler2;
 
   const ResponseReverseModel({
     required this.amountTotal,
@@ -580,6 +594,20 @@ class ResponseReverseModel extends Equatable {
     required this.mid,
     required this.tid,
     required this.cid,
+    required this.amount,
+    required this.subtotal,
+    required this.tax,
+    required this.sequential,
+    required this.authNumber,
+    required this.idCodNetAcq,
+    required this.idCodDef,
+    required this.limitDef,
+    required this.monthsGrace,
+    required this.filler1,
+    required this.service,
+    required this.tips,
+    required this.fixedAmount,
+    required this.filler2,
   });
 
   @override
@@ -588,11 +616,25 @@ class ResponseReverseModel extends Equatable {
         amountIVA,
         amountNotIVA,
         iva,
+        amount,
+        subtotal,
+        tax,
+        sequential,
         hourTrans,
         dateTrans,
+        authNumber,
         mid,
         tid,
         cid,
+        idCodNetAcq,
+        idCodDef,
+        limitDef,
+        monthsGrace,
+        filler1,
+        service,
+        tips,
+        fixedAmount,
+        filler2,
       ];
 
   ResponseReverseModel copyWith({
@@ -600,22 +642,50 @@ class ResponseReverseModel extends Equatable {
     String? amountIVA,
     String? amountNotIVA,
     String? iva,
+    double? amount,
+    double? subtotal,
+    double? tax,
+    String? sequential,
     String? hourTrans,
     String? dateTrans,
+    String? authNumber,
     String? mid,
     String? tid,
     String? cid,
+    String? idCodNetAcq,
+    String? idCodDef,
+    String? limitDef,
+    String? monthsGrace,
+    String? filler1,
+    String? service,
+    String? tips,
+    String? fixedAmount,
+    String? filler2,
   }) {
     return ResponseReverseModel(
       amountTotal: amountTotal ?? this.amountTotal,
       amountIVA: amountIVA ?? this.amountIVA,
       amountNotIVA: amountNotIVA ?? this.amountNotIVA,
       iva: iva ?? this.iva,
+      amount: amount ?? this.amount,
+      subtotal: subtotal ?? this.subtotal,
+      tax: tax ?? this.tax,
+      sequential: sequential ?? this.sequential,
       hourTrans: hourTrans ?? this.hourTrans,
       dateTrans: dateTrans ?? this.dateTrans,
+      authNumber: authNumber ?? this.authNumber,
       mid: mid ?? this.mid,
       tid: tid ?? this.tid,
       cid: cid ?? this.cid,
+      idCodNetAcq: idCodNetAcq ?? this.idCodNetAcq,
+      idCodDef: idCodDef ?? this.idCodDef,
+      limitDef: limitDef ?? this.limitDef,
+      monthsGrace: monthsGrace ?? this.monthsGrace,
+      filler1: filler1 ?? this.filler1,
+      service: service ?? this.service,
+      tips: tips ?? this.tips,
+      fixedAmount: fixedAmount ?? this.fixedAmount,
+      filler2: filler2 ?? this.filler2,
     );
   }
 
@@ -625,11 +695,25 @@ class ResponseReverseModel extends Equatable {
       amountIVA: '',
       amountNotIVA: '',
       iva: '',
+      amount: 0,
+      subtotal: 0,
+      tax: 0,
+      sequential: '',
       hourTrans: '',
       dateTrans: '',
+      authNumber: '',
       mid: '',
       tid: '',
       cid: '',
+      idCodNetAcq: '',
+      idCodDef: '',
+      limitDef: '',
+      monthsGrace: '',
+      filler1: '',
+      service: '',
+      tips: '',
+      fixedAmount: '',
+      filler2: '',
     );
   }
 
@@ -639,11 +723,25 @@ class ResponseReverseModel extends Equatable {
       amountIVA: json['amountIVA'] as String? ?? '',
       amountNotIVA: json['amountNotIVA'] as String? ?? '',
       iva: json['iva'] as String? ?? '',
+      amount: (json['amount'] as num?)?.toDouble() ?? 0,
+      subtotal: (json['subtotal'] as num?)?.toDouble() ?? 0,
+      tax: (json['tax'] as num?)?.toDouble() ?? 0,
+      sequential: json['sequential'] as String? ?? '',
       hourTrans: json['hourTrans'] as String? ?? '',
       dateTrans: json['dateTrans'] as String? ?? '',
+      authNumber: json['authNumber'] as String? ?? '',
       mid: json['mid'] as String? ?? '',
       tid: json['tid'] as String? ?? '',
       cid: json['cid'] as String? ?? '',
+      idCodNetAcq: json['idCodNetAcq'] as String? ?? '',
+      idCodDef: json['idCodDef'] as String? ?? '',
+      limitDef: json['limitDef'] as String? ?? '',
+      monthsGrace: json['monthsGrace'] as String? ?? '',
+      filler1: json['filler1'] as String? ?? '',
+      service: json['service'] as String? ?? '',
+      tips: json['tips'] as String? ?? '',
+      fixedAmount: json['fixedAmount'] as String? ?? '',
+      filler2: json['filler2'] as String? ?? '',
     );
   }
 
@@ -653,11 +751,25 @@ class ResponseReverseModel extends Equatable {
       'amountIVA': amountIVA,
       'amountNotIVA': amountNotIVA,
       'iva': iva,
+      'amount': amount,
+      'subtotal': subtotal,
+      'tax': tax,
+      'sequential': sequential,
       'hourTrans': hourTrans,
       'dateTrans': dateTrans,
+      'authNumber': authNumber,
       'mid': mid,
       'tid': tid,
       'cid': cid,
+      'idCodNetAcq': idCodNetAcq,
+      'idCodDef': idCodDef,
+      'limitDef': limitDef,
+      'monthsGrace': monthsGrace,
+      'filler1': filler1,
+      'service': service,
+      'tips': tips,
+      'fixedAmount': fixedAmount,
+      'filler2': filler2,
     };
   }
 
@@ -669,11 +781,25 @@ class ResponseReverseModel extends Equatable {
         'amountIVA: $amountIVA, '
         'amountNotIVA: $amountNotIVA, '
         'iva: $iva, '
+        'amount: $amount, '
+        'subtotal: $subtotal, '
+        'tax: $tax, '
+        'sequential: $sequential, '
         'hourTrans: $hourTrans, '
         'dateTrans: $dateTrans, '
+        'authNumber: $authNumber, '
         'mid: $mid, '
         'tid: $tid, '
-        'cid: $cid'
+        'cid: $cid, '
+        'idCodNetAcq: $idCodNetAcq, '
+        'idCodDef: $idCodDef, '
+        'limitDef: $limitDef, '
+        'monthsGrace: $monthsGrace, '
+        'filler1: $filler1, '
+        'service: $service, '
+        'tips: $tips, '
+        'fixedAmount: $fixedAmount, '
+        'filler2: $filler2'
         ')';
   }
 }
