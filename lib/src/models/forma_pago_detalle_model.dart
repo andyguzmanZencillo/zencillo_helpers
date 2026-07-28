@@ -57,6 +57,7 @@ class FormaPagoDetalleModel extends Equatable {
   final bool multiplesVentas;
   final bool result;
   final ResponseReverseModel? responseReverse;
+  final bool isReverse;
 
   const FormaPagoDetalleModel({
     required this.idVenta,
@@ -115,6 +116,7 @@ class FormaPagoDetalleModel extends Equatable {
     required this.multiplesVentas,
     required this.result,
     this.responseReverse,
+    this.isReverse = false,
   });
 
   @override
@@ -175,6 +177,7 @@ class FormaPagoDetalleModel extends Equatable {
         multiplesVentas,
         result,
         responseReverse,
+        isReverse,
       ];
 
   FormaPagoDetalleModel copyWith({
@@ -234,6 +237,7 @@ class FormaPagoDetalleModel extends Equatable {
     bool? multiplesVentas,
     bool? result,
     ResponseReverseModel? responseReverse,
+    bool? isReverse,
   }) {
     return FormaPagoDetalleModel(
       idVenta: idVenta ?? this.idVenta,
@@ -299,6 +303,7 @@ class FormaPagoDetalleModel extends Equatable {
       multiplesVentas: multiplesVentas ?? this.multiplesVentas,
       result: result ?? this.result,
       responseReverse: responseReverse ?? this.responseReverse,
+      isReverse: isReverse ?? this.isReverse,
     );
   }
 
@@ -360,7 +365,8 @@ class FormaPagoDetalleModel extends Equatable {
         'anulada: $anulada, '
         'multiplesVentas: $multiplesVentas, '
         'result: $result, '
-        'responseReverse: $responseReverse'
+        'responseReverse: $responseReverse, '
+        'isReverse: $isReverse'
         ')';
   }
   //empty
@@ -486,6 +492,7 @@ class FormaPagoDetalleModel extends Equatable {
       anulada: json['anulada'] as bool? ?? false,
       multiplesVentas: json['multiplesVentas'] as bool? ?? false,
       result: json['result'] as bool? ?? false,
+      isReverse: json['isReverse'] as bool? ?? false,
     );
   }
   //toJson
@@ -546,6 +553,7 @@ class FormaPagoDetalleModel extends Equatable {
       'anulada': anulada,
       'multiplesVentas': multiplesVentas,
       'result': result,
+      'isReverse': isReverse,
     };
   }
 }
