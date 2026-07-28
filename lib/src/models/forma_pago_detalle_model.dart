@@ -56,6 +56,7 @@ class FormaPagoDetalleModel extends Equatable {
   final bool anulada;
   final bool multiplesVentas;
   final bool result;
+  final ResponseReverseModel? responseReverse;
 
   const FormaPagoDetalleModel({
     required this.idVenta,
@@ -113,6 +114,7 @@ class FormaPagoDetalleModel extends Equatable {
     required this.anulada,
     required this.multiplesVentas,
     required this.result,
+    this.responseReverse,
   });
 
   @override
@@ -171,7 +173,8 @@ class FormaPagoDetalleModel extends Equatable {
         idCashBack,
         anulada,
         multiplesVentas,
-        result
+        result,
+        responseReverse,
       ];
 
   FormaPagoDetalleModel copyWith({
@@ -230,70 +233,73 @@ class FormaPagoDetalleModel extends Equatable {
     bool? anulada,
     bool? multiplesVentas,
     bool? result,
+    ResponseReverseModel? responseReverse,
   }) {
     return FormaPagoDetalleModel(
-        idVenta: idVenta ?? this.idVenta,
-        idTurno: idTurno ?? this.idTurno,
-        identificacionRed: identificacionRed ?? this.identificacionRed,
-        codigoRespuestaActor: codigoRespuestaActor ?? this.codigoRespuestaActor,
-        mensajeRespuesta: mensajeRespuesta ?? this.mensajeRespuesta,
-        secuencialTransaccion:
-            secuencialTransaccion ?? this.secuencialTransaccion,
-        numeroLote: numeroLote ?? this.numeroLote,
-        horaTransaccion: horaTransaccion ?? this.horaTransaccion,
-        fechaTransaccion: fechaTransaccion ?? this.fechaTransaccion,
-        numeroAutorizacion: numeroAutorizacion ?? this.numeroAutorizacion,
-        tid: tid ?? this.tid,
-        mid: mid ?? this.mid,
-        valorInteres: valorInteres ?? this.valorInteres,
-        mensajeImpresion: mensajeImpresion ?? this.mensajeImpresion,
-        codigoBanco: codigoBanco ?? this.codigoBanco,
-        nombreBanco: nombreBanco ?? this.nombreBanco,
-        nombreGrupoTarjeta: nombreGrupoTarjeta ?? this.nombreGrupoTarjeta,
-        modoLectura: modoLectura ?? this.modoLectura,
-        nombreTarjetaHabiente:
-            nombreTarjetaHabiente ?? this.nombreTarjetaHabiente,
-        montoFijo: montoFijo ?? this.montoFijo,
-        identificadorAplicacion:
-            identificadorAplicacion ?? this.identificadorAplicacion,
-        aid: aid ?? this.aid,
-        tipoCrigtograma: tipoCrigtograma ?? this.tipoCrigtograma,
-        pin: pin ?? this.pin,
-        arqc: arqc ?? this.arqc,
-        numeroTarjetaTruncado:
-            numeroTarjetaTruncado ?? this.numeroTarjetaTruncado,
-        fechaVencimientoTarjeta:
-            fechaVencimientoTarjeta ?? this.fechaVencimientoTarjeta,
-        numeroTarjetaEncriptada:
-            numeroTarjetaEncriptada ?? this.numeroTarjetaEncriptada,
-        impuesto: impuesto ?? this.impuesto,
-        baseConImpuesto: baseConImpuesto ?? this.baseConImpuesto,
-        baseSinImpuesto: baseSinImpuesto ?? this.baseSinImpuesto,
-        montoImpuesto: montoImpuesto ?? this.montoImpuesto,
-        montoTotal: montoTotal ?? this.montoTotal,
-        idFormaPago: idFormaPago ?? this.idFormaPago,
-        host: host ?? this.host,
-        hostName: hostName ?? this.hostName,
-        tipoTarjeta: tipoTarjeta ?? this.tipoTarjeta,
-        tipoVenta: tipoVenta ?? this.tipoVenta,
-        numeroTarjeta: numeroTarjeta ?? this.numeroTarjeta,
-        loteAbierto: loteAbierto ?? this.loteAbierto,
-        nombreTH: nombreTH ?? this.nombreTH,
-        aprobacion: aprobacion ?? this.aprobacion,
-        idTerminal: idTerminal ?? this.idTerminal,
-        numeroReferencia: numeroReferencia ?? this.numeroReferencia,
-        codigoReferencia: codigoReferencia ?? this.codigoReferencia,
-        idComercio: idComercio ?? this.idComercio,
-        diferidoyQuickPayment:
-            diferidoyQuickPayment ?? this.diferidoyQuickPayment,
-        reservado: reservado ?? this.reservado,
-        archivoFirma: archivoFirma ?? this.archivoFirma,
-        tvr: tvr ?? this.tvr,
-        tsi: tsi ?? this.tsi,
-        idCashBack: idCashBack ?? this.idCashBack,
-        anulada: anulada ?? this.anulada,
-        multiplesVentas: multiplesVentas ?? this.multiplesVentas,
-        result: result ?? this.result);
+      idVenta: idVenta ?? this.idVenta,
+      idTurno: idTurno ?? this.idTurno,
+      identificacionRed: identificacionRed ?? this.identificacionRed,
+      codigoRespuestaActor: codigoRespuestaActor ?? this.codigoRespuestaActor,
+      mensajeRespuesta: mensajeRespuesta ?? this.mensajeRespuesta,
+      secuencialTransaccion:
+          secuencialTransaccion ?? this.secuencialTransaccion,
+      numeroLote: numeroLote ?? this.numeroLote,
+      horaTransaccion: horaTransaccion ?? this.horaTransaccion,
+      fechaTransaccion: fechaTransaccion ?? this.fechaTransaccion,
+      numeroAutorizacion: numeroAutorizacion ?? this.numeroAutorizacion,
+      tid: tid ?? this.tid,
+      mid: mid ?? this.mid,
+      valorInteres: valorInteres ?? this.valorInteres,
+      mensajeImpresion: mensajeImpresion ?? this.mensajeImpresion,
+      codigoBanco: codigoBanco ?? this.codigoBanco,
+      nombreBanco: nombreBanco ?? this.nombreBanco,
+      nombreGrupoTarjeta: nombreGrupoTarjeta ?? this.nombreGrupoTarjeta,
+      modoLectura: modoLectura ?? this.modoLectura,
+      nombreTarjetaHabiente:
+          nombreTarjetaHabiente ?? this.nombreTarjetaHabiente,
+      montoFijo: montoFijo ?? this.montoFijo,
+      identificadorAplicacion:
+          identificadorAplicacion ?? this.identificadorAplicacion,
+      aid: aid ?? this.aid,
+      tipoCrigtograma: tipoCrigtograma ?? this.tipoCrigtograma,
+      pin: pin ?? this.pin,
+      arqc: arqc ?? this.arqc,
+      numeroTarjetaTruncado:
+          numeroTarjetaTruncado ?? this.numeroTarjetaTruncado,
+      fechaVencimientoTarjeta:
+          fechaVencimientoTarjeta ?? this.fechaVencimientoTarjeta,
+      numeroTarjetaEncriptada:
+          numeroTarjetaEncriptada ?? this.numeroTarjetaEncriptada,
+      impuesto: impuesto ?? this.impuesto,
+      baseConImpuesto: baseConImpuesto ?? this.baseConImpuesto,
+      baseSinImpuesto: baseSinImpuesto ?? this.baseSinImpuesto,
+      montoImpuesto: montoImpuesto ?? this.montoImpuesto,
+      montoTotal: montoTotal ?? this.montoTotal,
+      idFormaPago: idFormaPago ?? this.idFormaPago,
+      host: host ?? this.host,
+      hostName: hostName ?? this.hostName,
+      tipoTarjeta: tipoTarjeta ?? this.tipoTarjeta,
+      tipoVenta: tipoVenta ?? this.tipoVenta,
+      numeroTarjeta: numeroTarjeta ?? this.numeroTarjeta,
+      loteAbierto: loteAbierto ?? this.loteAbierto,
+      nombreTH: nombreTH ?? this.nombreTH,
+      aprobacion: aprobacion ?? this.aprobacion,
+      idTerminal: idTerminal ?? this.idTerminal,
+      numeroReferencia: numeroReferencia ?? this.numeroReferencia,
+      codigoReferencia: codigoReferencia ?? this.codigoReferencia,
+      idComercio: idComercio ?? this.idComercio,
+      diferidoyQuickPayment:
+          diferidoyQuickPayment ?? this.diferidoyQuickPayment,
+      reservado: reservado ?? this.reservado,
+      archivoFirma: archivoFirma ?? this.archivoFirma,
+      tvr: tvr ?? this.tvr,
+      tsi: tsi ?? this.tsi,
+      idCashBack: idCashBack ?? this.idCashBack,
+      anulada: anulada ?? this.anulada,
+      multiplesVentas: multiplesVentas ?? this.multiplesVentas,
+      result: result ?? this.result,
+      responseReverse: responseReverse ?? this.responseReverse,
+    );
   }
 
   @override
@@ -353,7 +359,8 @@ class FormaPagoDetalleModel extends Equatable {
         'idCashBack: $idCashBack, '
         'anulada: $anulada, '
         'multiplesVentas: $multiplesVentas, '
-        'result: $result'
+        'result: $result, '
+        'responseReverse: $responseReverse'
         ')';
   }
   //empty
@@ -478,7 +485,7 @@ class FormaPagoDetalleModel extends Equatable {
       idCashBack: (json['idCashBack'] as num?)?.toInt() ?? 0,
       anulada: json['anulada'] as bool? ?? false,
       multiplesVentas: json['multiplesVentas'] as bool? ?? false,
-      result: json['result'] as bool? ??false,
+      result: json['result'] as bool? ?? false,
     );
   }
   //toJson
@@ -540,5 +547,125 @@ class FormaPagoDetalleModel extends Equatable {
       'multiplesVentas': multiplesVentas,
       'result': result,
     };
+  }
+}
+
+class ResponseReverseModel extends Equatable {
+  final String amountTotal;
+  final String amountIVA;
+  final String amountNotIVA;
+  final String iva;
+  final String hourTrans;
+  final String dateTrans;
+
+  final String mid;
+  final String tid;
+  final String cid;
+
+  const ResponseReverseModel({
+    required this.amountTotal,
+    required this.amountIVA,
+    required this.amountNotIVA,
+    required this.iva,
+    required this.hourTrans,
+    required this.dateTrans,
+    required this.mid,
+    required this.tid,
+    required this.cid,
+  });
+
+  @override
+  List<Object?> get props => [
+        amountTotal,
+        amountIVA,
+        amountNotIVA,
+        iva,
+        hourTrans,
+        dateTrans,
+        mid,
+        tid,
+        cid,
+      ];
+
+  ResponseReverseModel copyWith({
+    String? amountTotal,
+    String? amountIVA,
+    String? amountNotIVA,
+    String? iva,
+    String? hourTrans,
+    String? dateTrans,
+    String? mid,
+    String? tid,
+    String? cid,
+  }) {
+    return ResponseReverseModel(
+      amountTotal: amountTotal ?? this.amountTotal,
+      amountIVA: amountIVA ?? this.amountIVA,
+      amountNotIVA: amountNotIVA ?? this.amountNotIVA,
+      iva: iva ?? this.iva,
+      hourTrans: hourTrans ?? this.hourTrans,
+      dateTrans: dateTrans ?? this.dateTrans,
+      mid: mid ?? this.mid,
+      tid: tid ?? this.tid,
+      cid: cid ?? this.cid,
+    );
+  }
+
+  factory ResponseReverseModel.empty() {
+    return const ResponseReverseModel(
+      amountTotal: '',
+      amountIVA: '',
+      amountNotIVA: '',
+      iva: '',
+      hourTrans: '',
+      dateTrans: '',
+      mid: '',
+      tid: '',
+      cid: '',
+    );
+  }
+
+  factory ResponseReverseModel.fromJson(Map<String, dynamic> json) {
+    return ResponseReverseModel(
+      amountTotal: json['amountTotal'] as String? ?? '',
+      amountIVA: json['amountIVA'] as String? ?? '',
+      amountNotIVA: json['amountNotIVA'] as String? ?? '',
+      iva: json['iva'] as String? ?? '',
+      hourTrans: json['hourTrans'] as String? ?? '',
+      dateTrans: json['dateTrans'] as String? ?? '',
+      mid: json['mid'] as String? ?? '',
+      tid: json['tid'] as String? ?? '',
+      cid: json['cid'] as String? ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'amountTotal': amountTotal,
+      'amountIVA': amountIVA,
+      'amountNotIVA': amountNotIVA,
+      'iva': iva,
+      'hourTrans': hourTrans,
+      'dateTrans': dateTrans,
+      'mid': mid,
+      'tid': tid,
+      'cid': cid,
+    };
+  }
+
+  //tostring
+  @override
+  String toString() {
+    return 'ResponseReverseModel('
+        'amountTotal: $amountTotal, '
+        'amountIVA: $amountIVA, '
+        'amountNotIVA: $amountNotIVA, '
+        'iva: $iva, '
+        'hourTrans: $hourTrans, '
+        'dateTrans: $dateTrans, '
+        'mid: $mid, '
+        'tid: $tid, '
+        'cid: $cid'
+        ')';
   }
 }
