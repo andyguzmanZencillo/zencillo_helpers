@@ -59,9 +59,15 @@ class TextUtils {
       return [primeraLinea, ..._splitByLength(textoRestante, lengthPerLine)];
     }
 
-    // Caso 3: El label es más largo o igual que la línea, solo cabe parte del label
-    String primeraLinea = label.substring(0, lengthPerLine);
-    return [primeraLinea, ..._splitByLength(text, lengthPerLine)];
+// Caso 3: El label es más largo o igual que la línea
+    final primeraLinea = label.length > lengthPerLine
+        ? label.substring(0, lengthPerLine)
+        : label;
+
+    return [
+      primeraLinea,
+      ..._splitByLength(text, lengthPerLine),
+    ];
   }
 
   static List<String> _splitByLength(String text, int length) {
