@@ -150,10 +150,12 @@ class TextUtils {
       throw Exception("La cantidad de textos y anchos debe coincidir.");
     }
 
-    final int sumaAnchos = anchos.fold(0, (a, b) => a + b);
-    if (sumaAnchos > total) {
-      throw Exception(
-          "La suma de anchos ($sumaAnchos) no puede ser mayor que el total ($total).");
+    final anchosAjustados = List<int>.from(anchos);
+    var sumaAnchos = anchosAjustados.fold(0, (a, b) => a + b);
+    if (sumaAnchos > total && anchosAjustados.isNotEmpty) {
+      anchosAjustados[0] -= sumaAnchos - total;
+      if (anchosAjustados[0] < 0) anchosAjustados[0] = 0;
+      sumaAnchos = anchosAjustados.fold(0, (a, b) => a + b);
     }
 
     // Centra un texto en su bloque (recorta si excede).
@@ -169,7 +171,7 @@ class TextUtils {
     // Construye los bloques centrados.
     final bloques = <String>[];
     for (int i = 0; i < textos.length; i++) {
-      bloques.add(centrar(textos[i], anchos[i]));
+      bloques.add(centrar(textos[i], anchosAjustados[i]));
     }
 
     // Calcula y reparte el espacio sobrante entre los "gaps" (como MainAxisAlignment.spaceBetween).
