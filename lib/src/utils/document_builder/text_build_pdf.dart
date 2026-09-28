@@ -119,16 +119,19 @@ class TextBuildPdf {
     );
   }
 
+  /// roll80 tiene altura infinita; MultiPage exige altura finita.
+  static final PdfPageFormat _multiPageRoll80 = PdfPageFormat(
+    PdfPageFormat.roll80.width,
+    PdfPageFormat.a4.height,
+    marginAll: PdfPageFormat.roll80.marginLeft,
+  );
+
   static Future<Uint8List> build(List<widgets.Widget> children) async {
     final doc = widgets.Document();
 
     doc.addPage(
       widgets.MultiPage(
-        pageFormat: PdfPageFormat.roll80,
-        margin: const widgets.EdgeInsets.symmetric(
-          horizontal: 5,
-          vertical: 5,
-        ),
+        pageFormat: _multiPageRoll80,
         build: (widgets.Context context) => children,
       ),
     );
