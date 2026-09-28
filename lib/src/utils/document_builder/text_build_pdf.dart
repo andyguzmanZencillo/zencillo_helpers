@@ -119,22 +119,20 @@ class TextBuildPdf {
     );
   }
 
-  static Future<Uint8List> build(List<widgets.Widget> children) {
+  static Future<Uint8List> build(List<widgets.Widget> children) async {
     final doc = widgets.Document();
 
     doc.addPage(
-      widgets.Page(
+      widgets.MultiPage(
         pageFormat: PdfPageFormat.roll80,
-        margin: const widgets.EdgeInsets.all(15),
-        build: (widgets.Context context) {
-          return widgets.Container(
-              color: PdfColors.white,
-              child: widgets.Column(
-                  mainAxisAlignment: widgets.MainAxisAlignment.center,
-                  children: children));
-        },
+        margin: const widgets.EdgeInsets.symmetric(
+          horizontal: 5,
+          vertical: 5,
+        ),
+        build: (widgets.Context context) => children,
       ),
     );
+
     return doc.save();
   }
 }
