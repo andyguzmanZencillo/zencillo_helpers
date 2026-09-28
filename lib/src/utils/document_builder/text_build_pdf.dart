@@ -132,6 +132,9 @@ class TextBuildPdf {
     doc.addPage(
       widgets.MultiPage(
         pageFormat: _multiPageRoll80,
+        margin: const widgets.EdgeInsets.all(15),
+        crossAxisAlignment: widgets.CrossAxisAlignment.center,
+        mainAxisAlignment: widgets.MainAxisAlignment.start,
         build: (widgets.Context context) => children,
       ),
     );
