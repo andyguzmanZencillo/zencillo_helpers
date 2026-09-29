@@ -72,6 +72,10 @@ class BuilderDocument {
     List<PuntoVentaImpresionModel> puntosVentaImpresion = const [],
     bool useOrder = false,
     String? qr,
+    /// Android u otros destinos sin PDF: dejar en false para no armar ni serializar el PDF.
+    bool generatePdf = false,
+    /// Igual que PDF: false evita armar el payload MediaNet (p. ej. Android).
+    bool generateMediaNet = false,
   }) async {
     final text = <String>[];
     final xml = <String>[];
@@ -80,6 +84,25 @@ class BuilderDocument {
     final cardNetPos = <Map<String, dynamic>>[];
 
     final pdf = <widgets.Widget>[];
+    void pdfAdd(widgets.Widget Function() buildWidget) {
+      if (generatePdf) {
+        pdf.add(buildWidget());
+      }
+    }
+
+    void mediaNetAddAll(
+      Iterable<Map<String, dynamic>> Function() buildItems,
+    ) {
+      if (generateMediaNet) {
+        textMediaNet.addAll(buildItems());
+      }
+    }
+
+    void mediaNetAdd(Map<String, dynamic> Function() buildItem) {
+      if (generateMediaNet) {
+        textMediaNet.add(buildItem());
+      }
+    }
 
     if (useOrder) {
       items = await orderList(
@@ -115,8 +138,8 @@ class BuilderDocument {
           );
 
           //medianet pos
-          textMediaNet.addAll(
-            TextBuildMediaNet.textMultiLine(
+          mediaNetAddAll(
+            () => TextBuildMediaNet.textMultiLine(
               TextSafeUtils.normalize(item.text),
               width: lengthPerLine,
             ),
@@ -132,8 +155,8 @@ class BuilderDocument {
           );
 
           //pdf
-          pdf.add(
-            TextBuildPdf.text(
+          pdfAdd(
+            () => TextBuildPdf.text(
               TextSafeUtils.normalize(item.text),
             ),
           );
@@ -156,8 +179,8 @@ class BuilderDocument {
             TextBuildTermic.textoCentro(TextSafeUtils.normalize(item.text)),
           );
           //medianet
-          textMediaNet.addAll(
-            TextBuildMediaNet.textMultiLine(
+          mediaNetAddAll(
+            () => TextBuildMediaNet.textMultiLine(
               TextSafeUtils.normalize(item.text),
               width: lengthPerLine,
               bold: true,
@@ -174,8 +197,8 @@ class BuilderDocument {
           );
 
           //pdf
-          pdf.add(
-            TextBuildPdf.text(
+          pdfAdd(
+            () => TextBuildPdf.text(
               TextSafeUtils.normalize(item.text),
               bold: true,
             ),
@@ -207,8 +230,8 @@ class BuilderDocument {
 
           //medianet
 
-          textMediaNet.addAll(
-            TextBuildMediaNet.leftRightMultiLine(
+          mediaNetAddAll(
+            () => TextBuildMediaNet.leftRightMultiLine(
               TextSafeUtils.normalize(item.title),
               TextSafeUtils.normalize(item.value),
               width: lengthPerLine,
@@ -224,8 +247,8 @@ class BuilderDocument {
             ),
           );
           //pdf
-          pdf.add(
-            TextBuildPdf.leftRight(
+          pdfAdd(
+            () => TextBuildPdf.leftRight(
               TextSafeUtils.normalize(item.title),
               TextSafeUtils.normalize(item.value),
             ),
@@ -253,10 +276,10 @@ class BuilderDocument {
           }
 
           //medianet
-          for (var i = 0; i < item.lines; i++) {
-            textMediaNet.add(
-              TextBuildMediaNet.space(),
-            );
+          if (generateMediaNet) {
+            for (var i = 0; i < item.lines; i++) {
+              mediaNetAdd(() => TextBuildMediaNet.space());
+            }
           }
 
           //cardNetPos
@@ -267,10 +290,10 @@ class BuilderDocument {
           }
 
           //pdf
-          for (var i = 0; i < item.lines; i++) {
-            pdf.add(
-              TextBuildPdf.space(),
-            );
+          if (generatePdf) {
+            for (var i = 0; i < item.lines; i++) {
+              pdfAdd(() => TextBuildPdf.space());
+            }
           }
           break;
         case TypeDocument.divider:
@@ -287,8 +310,8 @@ class BuilderDocument {
           );
 
           //medianet
-          textMediaNet.add(
-            TextBuildMediaNet.text(
+          mediaNetAdd(
+            () => TextBuildMediaNet.text(
               TextUtils.singleLineSeparator(lengthPerLine),
             ),
           );
@@ -301,8 +324,8 @@ class BuilderDocument {
             ),
           );
           //pdf
-          pdf.add(
-            TextBuildPdf.separator(
+          pdfAdd(
+            () => TextBuildPdf.separator(
               width: lengthPerLine,
             ),
           );
@@ -320,8 +343,8 @@ class BuilderDocument {
             TextBuildTermic.separador(),
           );
           //medianet
-          textMediaNet.add(
-            TextBuildMediaNet.text(
+          mediaNetAdd(
+            () => TextBuildMediaNet.text(
               TextUtils.doubleLineSeparator(lengthPerLine),
             ),
           );
@@ -334,8 +357,8 @@ class BuilderDocument {
             ),
           );
           //pdf
-          pdf.add(
-            TextBuildPdf.doubleSeparator(
+          pdfAdd(
+            () => TextBuildPdf.doubleSeparator(
               width: lengthPerLine,
             ),
           );
@@ -348,9 +371,11 @@ class BuilderDocument {
             TextBuildTermic.qrCode(item.data),
           );
           //medianet
-          final qrBase64 = await QrUtils.generateQrBase64Safe(item.data);
-          if (qrBase64 != null) {
-            TextBuildMediaNet.image(qrBase64);
+          if (generateMediaNet) {
+            final qrBase64 = await QrUtils.generateQrBase64Safe(item.data);
+            if (qrBase64 != null) {
+              mediaNetAdd(() => TextBuildMediaNet.image(qrBase64));
+            }
           }
 
           //CARDNETPOS
@@ -360,9 +385,7 @@ class BuilderDocument {
             ),
           );
           //pdf
-          pdf.add(TextBuildPdf.qr(
-            item.data,
-          ));
+          pdfAdd(() => TextBuildPdf.qr(item.data));
           break;
       }
     }
@@ -374,9 +397,11 @@ class BuilderDocument {
         contenido: xml,
       ),
       termic: jsonEncode(termic),
-      mediaNetText: TextBuildMediaNet.build(textMediaNet),
+      mediaNetText: generateMediaNet
+          ? TextBuildMediaNet.build(textMediaNet)
+          : '',
       cardNetPos: TextBuildCardnet.buildPro(cardNetPos),
-      pdf: await TextBuildPdf.build(pdf),
+      pdf: generatePdf ? await TextBuildPdf.build(pdf) : Uint8List(0),
     );
 
     return data;

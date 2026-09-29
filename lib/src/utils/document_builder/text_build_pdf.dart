@@ -4,7 +4,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as widgets;
 
 class TextBuildPdf {
-  static const double defaultFontSize = 10;
+  static const double defaultFontSize = 8;
 
   static const widgets.TextStyle customFontSize = widgets.TextStyle(
     fontSize: defaultFontSize,
