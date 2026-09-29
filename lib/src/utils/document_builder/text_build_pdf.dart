@@ -4,25 +4,38 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as widgets;
 
 class TextBuildPdf {
+  static const double defaultFontSize = 10;
+
+  static const widgets.TextStyle customFontSize = widgets.TextStyle(
+    fontSize: defaultFontSize,
+  );
+
+  static widgets.TextStyle _style({
+    double fontSize = defaultFontSize,
+    bool bold = false,
+  }) {
+    return widgets.TextStyle(
+      fontSize: fontSize,
+      fontWeight: bold ? widgets.FontWeight.bold : widgets.FontWeight.normal,
+    );
+  }
+
   static widgets.Text text(
     String value, {
-    double fontSize = 10,
+    double fontSize = defaultFontSize,
     widgets.TextAlign align = widgets.TextAlign.center,
     bool bold = false,
   }) {
     return widgets.Text(
       value,
-      style: widgets.TextStyle(
-        fontSize: fontSize,
-        fontWeight: bold ? widgets.FontWeight.bold : widgets.FontWeight.normal,
-      ),
+      style: _style(fontSize: fontSize, bold: bold),
       textAlign: align,
     );
   }
 
   static widgets.Text textLeft(
     String value, {
-    double fontSize = 10,
+    double fontSize = defaultFontSize,
     bool bold = false,
   }) {
     return text(
@@ -35,7 +48,7 @@ class TextBuildPdf {
 
   static widgets.Text textRight(
     String value, {
-    double fontSize = 10,
+    double fontSize = defaultFontSize,
     bool bold = false,
   }) {
     return text(
@@ -49,30 +62,23 @@ class TextBuildPdf {
   static widgets.Row leftRight(
     String left,
     String right, {
-    double fontSize = 10,
+    double fontSize = defaultFontSize,
     bool bold = false,
   }) {
+    final style = _style(fontSize: fontSize, bold: bold);
     return widgets.Row(
       crossAxisAlignment: widgets.CrossAxisAlignment.start,
       children: [
         widgets.Text(
           left,
           textAlign: widgets.TextAlign.start,
-          style: widgets.TextStyle(
-            fontSize: fontSize,
-            fontWeight:
-                bold ? widgets.FontWeight.bold : widgets.FontWeight.normal,
-          ),
+          style: style,
         ),
         widgets.Expanded(
           child: widgets.Text(
             right,
             textAlign: widgets.TextAlign.end,
-            style: widgets.TextStyle(
-              fontSize: fontSize,
-              fontWeight:
-                  bold ? widgets.FontWeight.bold : widgets.FontWeight.normal,
-            ),
+            style: style,
           ),
         ),
       ],
@@ -81,7 +87,7 @@ class TextBuildPdf {
 
   static widgets.Text separator({
     int width = 32,
-    double fontSize = 10,
+    double fontSize = defaultFontSize,
   }) {
     return text(
       '-------------------------------------------------',
@@ -92,7 +98,7 @@ class TextBuildPdf {
 
   static widgets.Text doubleSeparator({
     int width = 32,
-    double fontSize = 10,
+    double fontSize = defaultFontSize,
   }) {
     return text(
       '============================',
@@ -133,6 +139,9 @@ class TextBuildPdf {
       widgets.MultiPage(
         pageFormat: _multiPageRoll80,
         margin: const widgets.EdgeInsets.all(15),
+        theme: widgets.ThemeData(
+          defaultTextStyle: customFontSize,
+        ),
         crossAxisAlignment: widgets.CrossAxisAlignment.center,
         mainAxisAlignment: widgets.MainAxisAlignment.start,
         build: (widgets.Context context) => children,
