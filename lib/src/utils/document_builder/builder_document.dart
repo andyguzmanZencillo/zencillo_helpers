@@ -72,8 +72,10 @@ class BuilderDocument {
     List<PuntoVentaImpresionModel> puntosVentaImpresion = const [],
     bool useOrder = false,
     String? qr,
+
     /// Android u otros destinos sin PDF: dejar en false para no armar ni serializar el PDF.
     bool generatePdf = false,
+
     /// Igual que PDF: false evita armar el payload MediaNet (p. ej. Android).
     bool generateMediaNet = false,
   }) async {
@@ -116,11 +118,11 @@ class BuilderDocument {
       switch (element.type) {
         case TypeDocument.text:
           final item = element as DocumentText;
-          if (useOrder) {
-            if (item.text == '0' || item.text.isEmpty || item.text == '1') {
-              continue;
-            }
+          //if (useOrder) {
+          if (item.text == '0' || item.text.isEmpty || item.text == '1') {
+            continue;
           }
+          // }
           //text
           text.add(TextSafeUtils.normalize(item.text));
 
@@ -397,9 +399,8 @@ class BuilderDocument {
         contenido: xml,
       ),
       termic: jsonEncode(termic),
-      mediaNetText: generateMediaNet
-          ? TextBuildMediaNet.build(textMediaNet)
-          : '',
+      mediaNetText:
+          generateMediaNet ? TextBuildMediaNet.build(textMediaNet) : '',
       cardNetPos: TextBuildCardnet.buildPro(cardNetPos),
       pdf: generatePdf ? await TextBuildPdf.build(pdf) : Uint8List(0),
     );
@@ -907,6 +908,4 @@ class DocumentQR implements DocumentItem {
 
 class DocumentBig {}
 
-class DocumentBigTitle implements DocumentBig {
-  
-}
+class DocumentBigTitle implements DocumentBig {}

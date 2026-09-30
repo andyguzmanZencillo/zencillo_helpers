@@ -16,6 +16,8 @@ extension StringDoubleSafe on String {
   }
 }
 
+
+
 extension StringToIntExtension on String? {
   int toIntSafe() {
     // Si es nulo o vacío, devuelve 0
