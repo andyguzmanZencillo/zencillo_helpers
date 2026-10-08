@@ -40,7 +40,6 @@ void main() {
         lengthPerLine: 32,
         tamanioLetra: 20,
         generatePdf: pdf,
-        tamanioLetraPdf: size,
       );
 
   test('PDF uses default and custom sizes for every text element', () async {

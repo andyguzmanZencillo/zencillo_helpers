@@ -76,20 +76,9 @@ class BuilderDocument {
     /// Android u otros destinos sin PDF: dejar en false para no armar ni serializar el PDF.
     bool generatePdf = false,
 
-    /// Tamaño de la letra del PDF en puntos.
-    double tamanioLetraPdf = TextBuildPdf.defaultFontSize,
-
     /// Igual que PDF: false evita armar el payload MediaNet (p. ej. Android).
     bool generateMediaNet = false,
   }) async {
-    if (generatePdf && (!tamanioLetraPdf.isFinite || tamanioLetraPdf <= 0)) {
-      throw ArgumentError.value(
-        tamanioLetraPdf,
-        'tamanioLetraPdf',
-        'Debe ser un número finito mayor que cero.',
-      );
-    }
-
     final text = <String>[];
     final xml = <String>[];
     final termic = <Map<String, dynamic>>[];
@@ -171,7 +160,7 @@ class BuilderDocument {
           pdfAdd(
             () => TextBuildPdf.text(
               TextSafeUtils.normalize(item.text),
-              fontSize: tamanioLetraPdf,
+              fontSize: tamanioLetra.toDouble(),
             ),
           );
           break;
@@ -223,7 +212,7 @@ class BuilderDocument {
             () => TextBuildPdf.leftRight(
               TextSafeUtils.normalize(item.title),
               TextSafeUtils.normalize(item.value),
-              fontSize: tamanioLetraPdf,
+              fontSize: tamanioLetra.toDouble(),
             ),
           );
           break;
@@ -300,7 +289,7 @@ class BuilderDocument {
           pdfAdd(
             () => TextBuildPdf.separator(
               width: lengthPerLine,
-              fontSize: tamanioLetraPdf,
+              fontSize: tamanioLetra.toDouble(),
             ),
           );
           break;
@@ -334,7 +323,7 @@ class BuilderDocument {
           pdfAdd(
             () => TextBuildPdf.doubleSeparator(
               width: lengthPerLine,
-              fontSize: tamanioLetraPdf,
+              fontSize: tamanioLetra.toDouble(),
             ),
           );
           break;
