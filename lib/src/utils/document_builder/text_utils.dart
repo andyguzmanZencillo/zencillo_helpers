@@ -158,41 +158,56 @@ class TextUtils {
       sumaAnchos = anchosAjustados.fold(0, (a, b) => a + b);
     }
 
-    // Centra un texto en su bloque (recorta si excede).
-    String centrar(String txt, int ancho) {
+    final gaps = textos.length > 1 ? textos.length - 1 : 0;
+    var sobrante = total - sumaAnchos;
+    if (sobrante < 0) sobrante = 0;
+
+    // Si no sobra espacio, las columnas se pegan (BIODI1.818,000).
+    // Se quita 1 de las columnas izquierdas para dejar un hueco mínimo.
+    if (gaps > 0 && sobrante < gaps) {
+      var need = gaps - sobrante;
+      while (need > 0) {
+        var stole = false;
+        for (int i = 0; i < anchosAjustados.length - 1 && need > 0; i++) {
+          if (anchosAjustados[i] <= 0) continue;
+          anchosAjustados[i]--;
+          need--;
+          stole = true;
+        }
+        if (!stole) break;
+      }
+      sumaAnchos = anchosAjustados.fold(0, (a, b) => a + b);
+      sobrante = total - sumaAnchos;
+      if (sobrante < 0) sobrante = 0;
+    }
+
+    String alinear(String txt, int ancho, {required bool derecha}) {
       if (ancho <= 0) return '';
       if (txt.length >= ancho) return txt.substring(0, ancho);
       final espacios = ancho - txt.length;
+      if (derecha) return ' ' * espacios + txt;
       final izq = espacios ~/ 2;
-      final der = espacios - izq;
-      return ' ' * izq + txt + ' ' * der;
+      return ' ' * izq + txt + ' ' * (espacios - izq);
     }
 
-    // Construye los bloques centrados.
     final bloques = <String>[];
     for (int i = 0; i < textos.length; i++) {
-      bloques.add(centrar(textos[i], anchosAjustados[i]));
+      final esUltima = i == textos.length - 1 && textos.length > 1;
+      bloques.add(alinear(textos[i], anchosAjustados[i], derecha: esUltima));
     }
-
-    // Calcula y reparte el espacio sobrante entre los "gaps" (como MainAxisAlignment.spaceBetween).
-    final gaps = textos.length > 1 ? textos.length - 1 : 0;
-    final sobrante = total - sumaAnchos;
 
     List<int> espaciosEntre = [];
     if (gaps == 0) {
-      // Con 1 solo bloque, spaceBetween no agrega espacios. Resultado es el bloque tal cual.
       espaciosEntre = [];
     } else {
-      final base = sobrante ~/ gaps; // cantidad mínima por gap
-      int resto =
-          sobrante % gaps; // reparte 1 extra a los primeros 'resto' gaps
+      final base = sobrante ~/ gaps;
+      int resto = sobrante % gaps;
       for (int i = 0; i < gaps; i++) {
         final extra = (i < resto) ? 1 : 0;
         espaciosEntre.add(base + extra);
       }
     }
 
-    // Une bloques con los espacios calculados.
     final sb = StringBuffer();
     for (int i = 0; i < bloques.length; i++) {
       sb.write(bloques[i]);
@@ -202,15 +217,11 @@ class TextUtils {
     }
 
     final resultado = sb.toString();
-
-    // Seguridad: garantiza longitud exacta.
-    if (resultado.length != total) {
-      // Ajuste fino por si hubiera alguna rareza numérica.
-      if (resultado.length < total) {
-        return resultado + ' ' * (total - resultado.length);
-      } else {
-        return resultado.substring(0, total);
-      }
+    if (resultado.length < total) {
+      return resultado + ' ' * (total - resultado.length);
+    }
+    if (resultado.length > total) {
+      return resultado.substring(0, total);
     }
     return resultado;
   }

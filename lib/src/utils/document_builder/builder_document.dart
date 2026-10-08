@@ -76,9 +76,20 @@ class BuilderDocument {
     /// Android u otros destinos sin PDF: dejar en false para no armar ni serializar el PDF.
     bool generatePdf = false,
 
+    /// Tamaño de la letra del PDF en puntos.
+    double tamanioLetraPdf = TextBuildPdf.defaultFontSize,
+
     /// Igual que PDF: false evita armar el payload MediaNet (p. ej. Android).
     bool generateMediaNet = false,
   }) async {
+    if (generatePdf && (!tamanioLetraPdf.isFinite || tamanioLetraPdf <= 0)) {
+      throw ArgumentError.value(
+        tamanioLetraPdf,
+        'tamanioLetraPdf',
+        'Debe ser un número finito mayor que cero.',
+      );
+    }
+
     final text = <String>[];
     final xml = <String>[];
     final termic = <Map<String, dynamic>>[];
@@ -160,52 +171,11 @@ class BuilderDocument {
           pdfAdd(
             () => TextBuildPdf.text(
               TextSafeUtils.normalize(item.text),
+              fontSize: tamanioLetraPdf,
             ),
           );
           break;
-        case TypeDocument.textBold:
-          //text
-          final item = element as DocumentText;
-          text.add(TextSafeUtils.normalize(item.text));
 
-          //XML
-          xml.add(
-            TextBuildXml.textoN(
-              TextSafeUtils.normalize(item.text),
-              lengthPerLine,
-            ),
-          );
-
-          //termic
-          termic.add(
-            TextBuildTermic.textoCentro(TextSafeUtils.normalize(item.text)),
-          );
-          //medianet
-          mediaNetAddAll(
-            () => TextBuildMediaNet.textMultiLine(
-              TextSafeUtils.normalize(item.text),
-              width: lengthPerLine,
-              bold: true,
-            ),
-          );
-          //cardNetPos
-          cardNetPos.addAll(
-            TextBuildCardnet.textCenterList(
-              TextSafeUtils.normalize(item.text),
-              bold: true,
-              fontSize: tamanioLetra,
-              width: lengthPerLine,
-            ),
-          );
-
-          //pdf
-          pdfAdd(
-            () => TextBuildPdf.text(
-              TextSafeUtils.normalize(item.text),
-              bold: true,
-            ),
-          );
-          break;
         case TypeDocument.rightLeft:
           //text
           final item = element as DocumentTextRightLeft;
@@ -253,6 +223,7 @@ class BuilderDocument {
             () => TextBuildPdf.leftRight(
               TextSafeUtils.normalize(item.title),
               TextSafeUtils.normalize(item.value),
+              fontSize: tamanioLetraPdf,
             ),
           );
           break;
@@ -329,6 +300,7 @@ class BuilderDocument {
           pdfAdd(
             () => TextBuildPdf.separator(
               width: lengthPerLine,
+              fontSize: tamanioLetraPdf,
             ),
           );
           break;
@@ -362,6 +334,7 @@ class BuilderDocument {
           pdfAdd(
             () => TextBuildPdf.doubleSeparator(
               width: lengthPerLine,
+              fontSize: tamanioLetraPdf,
             ),
           );
           break;
@@ -489,7 +462,6 @@ class ResultBuilderDocument extends Equatable {
 enum TypeDocument {
   text,
   rightLeft,
-  textBold,
   space,
   divider,
   dobleDivider,
@@ -570,62 +542,6 @@ class DocumentText implements DocumentItem {
         _posicion = posicion,
         _numberFather = numberFather,
         _type = type;
-}
-
-// DocumentTextBold
-class DocumentTextBold implements DocumentItem {
-  final String text;
-  TypeDocument _type;
-  int _number;
-  bool _isUse;
-  int _posicion;
-  int _posicionAlter;
-  int _numberFather;
-
-  @override
-  TypeDocument get type => _type;
-  @override
-  set type(TypeDocument value) => _type = value;
-
-  @override
-  int get number => _number;
-  @override
-  set number(int value) => _number = value;
-
-  @override
-  bool get isUse => _isUse;
-  @override
-  set isUse(bool value) => _isUse = value;
-
-  @override
-  int get posicion => _posicion;
-  @override
-  set posicion(int value) => _posicion = value;
-
-  @override
-  int get posicionAlter => _posicionAlter;
-  @override
-  set posicionAlter(int value) => _posicionAlter = value;
-
-  @override
-  int get numberFather => _numberFather;
-  @override
-  set numberFather(int value) => _numberFather = value;
-
-  DocumentTextBold({
-    required this.text,
-    bool isUse = true,
-    TypeDocument type = TypeDocument.textBold,
-    int number = 0,
-    int posicion = 0,
-    int numberFather = 0,
-    int posicionAlter = 0,
-  })  : _isUse = isUse,
-        _type = type,
-        _number = number,
-        _posicion = posicion,
-        _numberFather = numberFather,
-        _posicionAlter = posicionAlter;
 }
 
 // DocumentTextRightLeft
